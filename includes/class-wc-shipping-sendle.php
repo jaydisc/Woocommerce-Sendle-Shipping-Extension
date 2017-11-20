@@ -436,6 +436,7 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 		if ( $package_requests ) {
 			
 			$rate_cost = 0;
+			$messages = '';
 			
 			foreach ( $package_requests as $key => $package_request ) {
 				// Get the cubic weight
@@ -456,8 +457,42 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 				
 				if ($response)
 				{
-					foreach ($response as $response_object)
+					// I don't know how to make this not stay visible after correcting the problem, so disabling for now.
+					// is_cart was an attempt as I thought it worked there but the AJAX breaks it there too.
+					// if ( is_cart() )
+					// {
+					// 	if (!empty($response->error))
+					// 	{
+					// 		if (!empty($response->error_description))
+					// 		{
+					// 			$messages .= '<p>We were unable to lookup that address with our courier service (often our cheapest option!).</p>';
+					// 			// $messages .= '<p>' . $response->error_description . '</p>';
+					// 		}
+					//
+					// 		if (!empty($response->messages))
+					// 		{
+					// 			$messages .= '<p>It could be one of these issues:</p>';
+					// 			$messages .= '<ul>';
+					// 			foreach ($response->messages as $subject => $message) {
+					// 				$messages .= '<li>' . ucwords(str_replace('_', ' ', $subject)) . ' ' . implode(', ', $message) . '</li>';
+					// 			}
+					// 			$messages .= '</ul>';
+					// 		}
+					//
+					// 		// $messages .= '<p>Alternatively, you can use any available shipping service below.</p>';
+					//
+					// 		if (!empty($messages))
+					// 		{
+					// 			wc_add_notice( $messages, 'notice');
+					// 		}
+					//
+					// 		return;
+					// 	}
+					// }
+					
+					foreach ($response as $response_object_id => $response_object)
 					{
+						// Do we have a quoted amount?
 						if (!empty($response_object->quote->gross->amount))
 						{
 							$rate = $response_object->quote->gross->amount;
@@ -467,10 +502,9 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 							}
 							$rate_cost += $rate;
 						}
-						// echo_array($quote);
 					}
 				}
-				//
+				
 				// if ( isset( $response->services->service ) && is_array( $response->services->service ) ) {
 				//
 				// 	// Loop our known services
