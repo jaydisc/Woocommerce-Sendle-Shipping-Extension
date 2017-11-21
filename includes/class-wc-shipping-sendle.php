@@ -501,119 +501,6 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 						}
 					}
 				}
-				
-				// if ( isset( $response->services->service ) && is_array( $response->services->service ) ) {
-				//
-				// 	// Loop our known services
-				// 	foreach ( $this->services as $service => $values ) {
-				//
-				// 		$rate_code = (string) $service;
-				// 		$rate_id   = $this->id . ':' . $rate_code;
-				// 		$rate_name = (string) $values['name'];
-				// 		$rate_cost = null;
-				// 		$optional_extras_cost = 0;
-				//
-				// 		// Main service code
-				// 		foreach ( $response->services->service as $quote ) {
-				// 			if ( ( isset( $values['alternate_services'] ) && in_array( $quote->code, $values['alternate_services'] ) ) || $service == $quote->code ) {
-				//
-				// 				$delivery_confirmation = false;
-				// 				$rate_set              = false;
-				//
-				// 				if ( $this->is_satchel( $quote->code ) && 'off' === $this->satchel_rates ) {
-				// 					continue;
-				// 				}
-				//
-				// 				if ( $this->is_satchel( $quote->code ) ) {
-				// 					switch ( $quote->code ) {
-				// 						case 'AUS_PARCEL_REGULAR_SATCHEL_500G' :
-				// 						case 'AUS_PARCEL_EXPRESS_SATCHEL_500G' :
-				// 							if ( $package_request['length'] > 35 || $package_request['width'] > 22 || ! $this->girth_fits_in_satchel( $package_request['length'], $package_request['width'], $package_request['height'], 35, 22 ) ) {
-				// 								continue;
-				// 							}
-				// 							break;
-				// 						case 'AUS_PARCEL_REGULAR_SATCHEL_3KG' :
-				// 						case 'AUS_PARCEL_EXPRESS_SATCHEL_3KG' :
-				// 							if ( $package_request['length'] > 40 || $package_request['width'] > 31 || ! $this->girth_fits_in_satchel( $package_request['length'], $package_request['width'], $package_request['height'], 40, 31 ) ) {
-				// 								continue;
-				// 							}
-				// 							break;
-				// 						case 'AUS_PARCEL_REGULAR_SATCHEL_5KG' :
-				// 						case 'AUS_PARCEL_EXPRESS_SATCHEL_5KG' :
-				// 							if ( $package_request['length'] > 51 || $package_request['width'] > 43 || ! $this->girth_fits_in_satchel( $package_request['length'], $package_request['width'], $package_request['height'], 51, 43 ) ) {
-				// 								continue;
-				// 							}
-				// 							break;
-				// 					}
-				// 					if ( 'priority' === $this->satchel_rates ) {
-				// 						$rate_cost = $quote->price;
-				// 						$rate_set  = true;
-				// 					}
-				// 					if ( ! empty( $this->custom_services[ $rate_code ]['delivery_confirmation'] ) ) {
-				// 						$delivery_confirmation = true;
-				// 					}
-				// 				} elseif ( ! empty( $this->custom_services[ $rate_code ]['delivery_confirmation'] ) ) {
-				// 					$delivery_confirmation = true;
-				// 				}
-				//
-				// 				/**
-				// 				 * You must add $2.95 for Signature on Delivery
-				// 				 * if your item is valued above $300.
-				// 				 *
-				// 				 * Please note that this doesn't apply to Courier
-				// 				 * Post.
-				// 				 *
-				// 				 * Don't be confused why we're checking `$package_request['extra_cover']`,
-				// 				 * because it's actually product's price.
-				// 				 *
-				// 				 * @see https://auspost.com.au/parcels-mail/sending-in-australia/domestic-parcels/optional-extras-domestic
-				// 				 * @see https://github.com/woocommerce/woocommerce-shipping-australia-post/issues/84
-				// 				 */
-				// 				// if ( ! $this->is_courier_post( $quote->code ) && $package_request['extra_cover'] >= 300 ) {
-				// 				// 	$delivery_confirmation = true;
-				// 				// }
-				// 				//
-				// 				if ( is_null( $rate_cost ) ) {
-				// 					$rate_cost = $quote->price;
-				// 					$rate_set  = true;
-				// 				} elseif ( $quote->price < $rate_cost ) {
-				// 					$rate_cost = $quote->price;
-				// 					$rate_set  = true;
-				// 				}
-				//
-				// 				if ( $rate_set ) {
-				// 					Reset extras cost to 0 since we do not want to duplicate costs for each service
-				// 					$optional_extras_cost = 0;
-				//
-				// 					User wants extra cover
-				// 					if ( ! empty( $this->custom_services[ $rate_code ]['extra_cover'] ) && isset( $package_request['extra_cover'] ) ) {
-				// 						$max_extra_cover = $this->_get_max_extra_cover_from_quote( $package_request['extra_cover'], $quote );
-				// 						$optional_extras_cost += $this->calculate_extra_cover_cost( $package_request['extra_cover'], $max_extra_cover );
-				//
-				// 						Moved from line 686:
-				// 						if ( ! $this->is_courier_post( $quote->code ) && $package_request['extra_cover'] >= 300 ) {
-				// 							$delivery_confirmation = true;
-				// 						}
-				// 					}
-				//
-				// 					User wants SOD or an item is valued above $300.
-				// 					if ( $delivery_confirmation ) {
-				// 						if ( $this->is_international ) {
-				// 							$optional_extras_cost += $this->int_sod_cost;
-				// 						} else {
-				// 							$optional_extras_cost += $this->sod_cost;
-				// 						}
-				// 					}
-				// 				}
-				// 			}
-				// 		}
-				//
-				// 		if ( $rate_cost ) {
-				// 			$rate_cost += $optional_extras_cost;
-				// 			$this->prepare_rate( $rate_code, $rate_id, $rate_name, $rate_cost, $package_request, $package );
-				// 		}
-				// 	}
-				// }
 			}
 		}
 		
@@ -637,43 +524,6 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 		// Add it and quit.
 		$this->add_rate( $rate );
 		return;
-		
-		
-		//
-		// // Ensure rates were found for all packages
-		// if ( $this->found_rates ) {
-		// 	foreach ( $this->found_rates as $key => $value ) {
-		// 		if ( $value['packages'] < sizeof( $package_requests ) ) {
-		// 			unset( $this->found_rates[ $key ] );
-		// 		}
-		// 	}
-		// }
-		//
-		// // Add rates
-		// if ( $this->found_rates ) {
-		// 	if ( 'all' === $this->offer_rates ) {
-		//
-		// 		uasort( $this->found_rates, array( $this, 'sort_rates' ) );
-		//
-		// 		foreach ( $this->found_rates as $key => $rate ) {
-		// 			echo_array($rate);
-		// 			$this->add_rate( $rate );
-		// 		}
-		// 	} else {
-		//
-		// 		$cheapest_rate = '';
-		//
-		// 		foreach ( $this->found_rates as $key => $rate ) {
-		// 			if ( ! $cheapest_rate || $cheapest_rate['cost'] > $rate['cost'] ) {
-		// 				$cheapest_rate = $rate;
-		// 			}
-		// 		}
-		//
-		// 		$cheapest_rate['label'] = $this->title; // will use generic rate label defined by user
-		// 		$this->add_rate( $cheapest_rate );
-		//
-		// 	}
-		// }
 	}
 
 	/**
@@ -909,39 +759,6 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 
 
 	/**
-	 * For letter boxes convert the metrics to match it as users have set on on the product.
-	 *
-	 * Example:
-	 * the letter height is entered as `mm` but the product value is entered in `cm`.
-	 *
-	 * @since 1.9.0
-	 * @param array $boxes saved settings.
-	 * @return array $boxes
-	 */
-	public function convert_letter_boxes_to_match_product_metrics( $boxes ) {
-		foreach ( $boxes as $index => $box ) {
-			if ( $box['is_letter'] ) {
-
-				$updated_box = array();
-
-				$updated_box['is_letter']    = $box['is_letter'];
-				$updated_box['outer_length'] = wc_get_dimension( $box['outer_length'], 'cm', 'mm' );
-				$updated_box['outer_width']  = wc_get_dimension( $box['outer_width'],  'cm', 'mm' );
-				$updated_box['outer_height'] = wc_get_dimension( $box['outer_height'], 'cm', 'mm' );
-				$updated_box['inner_length'] = wc_get_dimension( $box['inner_length'], 'cm', 'mm' );
-				$updated_box['inner_width']  = wc_get_dimension( $box['inner_width'],  'cm', 'mm' );
-				$updated_box['inner_height'] = wc_get_dimension( $box['inner_height'], 'cm', 'mm' );
-				$updated_box['box_weight']   = wc_get_weight( $box['box_weight'], 'kg', 'g' );
-				$updated_box['max_weight']   = wc_get_weight( $box['max_weight'], 'kg', 'g' );
-
-				$boxes[ $index ] = $updated_box;
-
-			}
-		}
-		return $boxes;
-	}
-
-	/**
 	 * weight_only_shipping function.
 	 *
 	 * @access private
@@ -1098,8 +915,8 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 
 		$boxpack = new WC_Boxpack();
 
-		// Needed to ensure box packer works correctly.
-		$boxes = $this->convert_letter_boxes_to_match_product_metrics( $this->boxes );
+		// $boxes = $this->convert_letter_boxes_to_match_product_metrics( $this->boxes );
+		$boxes = $this->boxes;
 		// Define boxes
 		if ( $boxes ) {
 			foreach ( $boxes as $key => $box ) {
