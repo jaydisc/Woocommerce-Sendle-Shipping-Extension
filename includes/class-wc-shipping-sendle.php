@@ -459,36 +459,33 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 				{
 					// I don't know how to make this not stay visible after correcting the problem, so disabling for now.
 					// is_cart was an attempt as I thought it worked there but the AJAX breaks it there too.
-					// if ( is_cart() )
-					// {
-					// 	if (!empty($response->error))
-					// 	{
-					// 		if (!empty($response->error_description))
-					// 		{
-					// 			$messages .= '<p>We were unable to lookup that address with our courier service (often our cheapest option!).</p>';
-					// 			// $messages .= '<p>' . $response->error_description . '</p>';
-					// 		}
-					//
-					// 		if (!empty($response->messages))
-					// 		{
-					// 			$messages .= '<p>It could be one of these issues:</p>';
-					// 			$messages .= '<ul>';
-					// 			foreach ($response->messages as $subject => $message) {
-					// 				$messages .= '<li>' . ucwords(str_replace('_', ' ', $subject)) . ' ' . implode(', ', $message) . '</li>';
-					// 			}
-					// 			$messages .= '</ul>';
-					// 		}
-					//
-					// 		// $messages .= '<p>Alternatively, you can use any available shipping service below.</p>';
-					//
-					// 		if (!empty($messages))
-					// 		{
-					// 			wc_add_notice( $messages, 'notice');
-					// 		}
-					//
-					// 		return;
-					// 	}
-					// }
+					if ( is_cart() )
+					{
+						if (!empty($response->error))
+						{
+							if (!empty($response->error_description))
+							{
+								$messages .= '<p>We were unable to lookup that address with our courier service (often our cheapest option!).</p>';
+								// $messages .= '<p>' . $response->error_description . '</p>';
+							}
+							if (!empty($response->messages))
+							{
+								$messages .= '<p>It could be one of these issues:</p>';
+								$messages .= '<ul>';
+								foreach ($response->messages as $subject => $message) {
+									$messages .= '<li>' . ucwords(str_replace('_', ' ', $subject)) . ' ' . implode(', ', $message) . '</li>';
+								}
+								$messages .= '</ul>';
+							}
+							
+							// $messages .= '<p>Alternatively, you can use any available shipping service below.</p>';
+							if (!empty($messages))
+							{
+								wc_add_notice( $messages, 'notice');
+							}
+							return;
+						}
+					}
 					
 					foreach ($response as $response_object_id => $response_object)
 					{
@@ -585,21 +582,21 @@ class WC_Shipping_Sendle extends WC_Shipping_Method {
 				// 				}
 				//
 				// 				if ( $rate_set ) {
-				// 					// Reset extras cost to 0 since we do not want to duplicate costs for each service
+				// 					Reset extras cost to 0 since we do not want to duplicate costs for each service
 				// 					$optional_extras_cost = 0;
 				//
-				// 					// User wants extra cover
+				// 					User wants extra cover
 				// 					if ( ! empty( $this->custom_services[ $rate_code ]['extra_cover'] ) && isset( $package_request['extra_cover'] ) ) {
 				// 						$max_extra_cover = $this->_get_max_extra_cover_from_quote( $package_request['extra_cover'], $quote );
 				// 						$optional_extras_cost += $this->calculate_extra_cover_cost( $package_request['extra_cover'], $max_extra_cover );
 				//
-				// 						// Moved from line 686:
+				// 						Moved from line 686:
 				// 						if ( ! $this->is_courier_post( $quote->code ) && $package_request['extra_cover'] >= 300 ) {
 				// 							$delivery_confirmation = true;
 				// 						}
 				// 					}
 				//
-				// 					// User wants SOD or an item is valued above $300.
+				// 					User wants SOD or an item is valued above $300.
 				// 					if ( $delivery_confirmation ) {
 				// 						if ( $this->is_international ) {
 				// 							$optional_extras_cost += $this->int_sod_cost;
